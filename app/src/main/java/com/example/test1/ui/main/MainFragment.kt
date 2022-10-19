@@ -12,7 +12,7 @@ import com.example.test1.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainFragment : Fragment() {
+class MainFragment : Fragment() { // ntcn
 
     private var _binding: FragmentMainBinding? = null
     private val mBinding get() = _binding!!
