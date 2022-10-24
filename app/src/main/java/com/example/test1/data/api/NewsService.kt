@@ -3,8 +3,8 @@ package com.example.test1.data.api
 import com.example.test1.models.NewsResp
 import com.example.test1.utils.apikey.APIKEY
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.*
+
 
 interface NewsService {
 
@@ -23,4 +23,8 @@ interface NewsService {
         @Query("page") page : Int = 1,
         @Query("apiKey") apiKey : String = APIKEY,
         )  : Response<NewsResp>
+
+
+
 }
+

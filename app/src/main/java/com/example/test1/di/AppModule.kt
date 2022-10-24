@@ -28,4 +28,6 @@ object AppModule {
         Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create()).client(
             okHttpClient()
         ).build().create(NewsService::class.java)
+
+
 }
