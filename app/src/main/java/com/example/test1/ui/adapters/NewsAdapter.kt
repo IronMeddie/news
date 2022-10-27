@@ -1,62 +1,85 @@
 package com.example.test1.ui.adapters
 
-import android.icu.lang.UCharacter.GraphemeClusterBreak.L
-import android.view.LayoutInflater
-import android.view.View
+
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.test1.R
-import com.example.test1.databinding.ItemArticleBinding
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.test1.models.Article
-
-class NewsAdapter: RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
-
-    inner class NewsViewHolder(view: View): RecyclerView.ViewHolder(view)
-
-    private lateinit var binding: ItemArticleBinding
+import com.example.test1.models.Source
+import com.example.test1.ui.adapters.HolderView.Companion.CONTENT
+import com.example.test1.ui.adapters.HolderView.Companion.HEADER
 
 
-    private val callback = object : DiffUtil.ItemCallback<Article>(){
+class NewsAdapter : RecyclerView.Adapter<ViewHolder>() {
+
+
+    private val callback = object : DiffUtil.ItemCallback<Article>() {
         override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {
-            return oldItem.url == newItem.url
-        }
-
-        override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
             return oldItem == newItem
         }
 
-    }
-
-    val differ = AsyncListDiffer(this,callback)
-
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
-        binding = ItemArticleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
-//            LayoutInflater.from(parent.context).inflate(R.layout.item_article, parent, false)
-        return NewsViewHolder(binding.root)
-    }
-
-    override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        val article = differ.currentList[position]
-        binding.apply {
-            Glide.with(root).load(article.urlToImage).into(articleImage)
-            articleImage.clipToOutline = true
-            articleTitle.text = article.title
-            articleDate.text = article.publishedAt
+        override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
+            return oldItem.url == newItem.url && oldItem.title == newItem.title
         }
 
-
     }
 
-    override fun getItemCount() = differ.currentList.size
+    private val differ = AsyncListDiffer(this, callback)
 
-    private var onItemClickListener : ((Article) -> Unit)? = null
 
-    fun onItemClikListener(listener: (Article) -> Unit){
+    override fun getItemViewType(position: Int): Int {
+        return if (differ.currentList[position] == emptyArticle()) HEADER else CONTENT
+    }
+
+    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int) = AppHolderFactory.getHolder(parent = viewGroup , viewType = i)
+
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        if (holder is NewsViewHolder){
+            val article = differ.currentList[position]
+            holder.bind(article)
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return differ.currentList.size
+    }
+
+
+    private var onItemClickListener: ((Article) -> Unit)? = null
+
+    fun onItemClikListener(listener: (Article) -> Unit) {
         onItemClickListener = listener
     }
+
+
+    fun updateListAddHeader(list: MutableList<Article>) {
+        list[0] = emptyArticle()
+        differ.submitList(list)
+    }
+
+    fun updateList(list: List<Article>) {
+        differ.submitList(list)
+    }
+
+    private fun emptyArticle(): Article =  Article(
+        null,
+        "null",
+        "Header_125987_MaiN__FragMeNt",
+        "null",
+        "null",
+        Source("", ""),
+        "null",
+        "Header_125987_MaiN__FragMeNt",
+        "null"
+    ) // header?
+
+
+
+
+
 }
+

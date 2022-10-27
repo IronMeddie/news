@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.test1.MainActivity
 import com.example.test1.databinding.FragmentMainBinding
 import com.example.test1.ui.adapters.NewsAdapter
 import com.example.test1.utils.Resource
@@ -23,26 +24,27 @@ class MainFragment : Fragment() { // ntcn
     lateinit var newsAdapter: NewsAdapter
 
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentMainBinding.inflate(inflater,container,false)
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
         return mBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
- initAdapter()
-        viewmodel.newsLiveSata.observe(viewLifecycleOwner){ response->
-            when(response){
+        initAdapter()
+
+        (activity as MainActivity).getBottomMenu()
+
+        viewmodel.newsLiveSata.observe(viewLifecycleOwner) { response ->
+            when (response) {
                 is Resource.Succes -> {
                     mBinding.progressBar.visibility = View.INVISIBLE
                     response.data?.let {
-                        newsAdapter.differ.submitList(it.articles)
+                        newsAdapter.updateListAddHeader(it.articles)
                     }
                 }
                 is Resource.Error -> {
@@ -51,14 +53,13 @@ class MainFragment : Fragment() { // ntcn
                         Log.e("checkData", "MainFragment error: ${it}")
                     }
                 }
-                is Resource.Loading-> {
+                is Resource.Loading -> {
                     mBinding.progressBar.visibility = View.VISIBLE
                 }
 
             }
 
         }
-
 
 
     }
@@ -68,6 +69,7 @@ class MainFragment : Fragment() { // ntcn
         mBinding.recyclerNews.adapter = newsAdapter
         mBinding.recyclerNews.layoutManager = LinearLayoutManager(activity)
     }
+
 
 
 }
