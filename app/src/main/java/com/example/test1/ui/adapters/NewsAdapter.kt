@@ -37,10 +37,14 @@ class NewsAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
         if (holder is NewsViewHolder){
             val article = differ.currentList[position]
             holder.bind(article)
+            holder.itemView.setOnClickListener {
+               onItemClickListener?.let {
+                   it(article)
+               }
+           }
         }
     }
 
@@ -51,7 +55,7 @@ class NewsAdapter : RecyclerView.Adapter<ViewHolder>() {
 
     private var onItemClickListener: ((Article) -> Unit)? = null
 
-    fun onItemClikListener(listener: (Article) -> Unit) {
+    fun setonItemClikListener(listener: (Article) -> Unit) {
         onItemClickListener = listener
     }
 
@@ -66,7 +70,7 @@ class NewsAdapter : RecyclerView.Adapter<ViewHolder>() {
     }
 
     private fun emptyArticle(): Article =  Article(
-        null,
+        0,
         "null",
         "Header_125987_MaiN__FragMeNt",
         "null",
