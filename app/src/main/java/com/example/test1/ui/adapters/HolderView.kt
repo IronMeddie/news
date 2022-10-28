@@ -9,6 +9,9 @@ interface HolderView {
         val CONTENT : Int
         get() = 1
 
+        val HEADER_Favorite :Int
+            get() = 3
+
     }
 }
 

@@ -4,9 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.test1.data.api.NewsRepository
+import com.example.test1.models.Article
 import com.example.test1.models.NewsResp
 import com.example.test1.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,19 +23,37 @@ class MainViewModel @Inject constructor(private val newsRepository: NewsReposito
         newsLiveSata.postValue(Resource.Loading())
         val response = newsRepository.getNews(countryCode = countryCode, pageNumber = newsPage)
 
-        if (response.isSuccessful){
-            response.body().let { res->
+        if (response.isSuccessful) {
+            response.body().let { res ->
                 newsLiveSata.postValue(Resource.Succes(res))
             }
 
-        }else newsLiveSata.postValue(Resource.Error(message = response.message()))
+        } else newsLiveSata.postValue(Resource.Error(message = response.message()))
+    }
+
+    fun updateListLikes(articles: MutableList<Article>): MutableList<Article> {
+        viewModelScope.launch(Dispatchers.IO) {
+                articles.forEach{
+                    it.liked = newsRepository.alreadiLiked(it)
+                }
+        }
+        return articles
     }
 
 
-init {
-    getNews("ru")
-}
 
+     fun saveToFavorites(article: Article) = viewModelScope.launch(Dispatchers.IO) {
+        if (!newsRepository.alreadiLiked(article)) {
+            newsRepository.addToFavorites(article)
+        } else newsRepository.deliteFavorite(article)
+    }
+
+
+
+
+    init {
+        getNews("ru")
+    }
 
 
 

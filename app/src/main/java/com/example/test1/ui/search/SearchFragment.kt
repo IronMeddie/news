@@ -10,6 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.test1.R
 import com.example.test1.databinding.FragmentMainBinding
@@ -17,6 +18,7 @@ import com.example.test1.databinding.FragmentSearchBinding
 import com.example.test1.models.Article
 import com.example.test1.models.Source
 import com.example.test1.ui.adapters.NewsAdapter
+import com.example.test1.ui.adapters.NewsViewHolder
 import com.example.test1.ui.main.MainViewModel
 import com.example.test1.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,7 +28,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), NewsViewHolder.Liked {
 
 
     private var _binding: FragmentSearchBinding? = null
@@ -44,6 +46,7 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initAdapter()
         newsAdapterSearch.setonItemClikListener{
             val bundle = bundleOf("article" to it)
@@ -71,7 +74,7 @@ class SearchFragment : Fragment() {
                 is Resource.Succes -> {
                     mBinding.progressBarSearch.visibility = View.INVISIBLE
                     response.data?.let {
-                        newsAdapterSearch.updateList(it.articles)
+                        newsAdapterSearch.updateList(viewmodel.updateListLikes(it.articles))
                     }
                 }
                 is Resource.Error -> {
@@ -91,11 +94,16 @@ class SearchFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        newsAdapterSearch = NewsAdapter()
+        newsAdapterSearch = NewsAdapter(this)
         mBinding.recyclerNewsSearch.adapter = newsAdapterSearch
         mBinding.recyclerNewsSearch.layoutManager = LinearLayoutManager(activity)
 
 
+    }
+
+    override fun onClickLiked(article: Article) {
+        viewmodel.saveToFavorites(article)
+        newsAdapterSearch.ItemLiked(article)
     }
 
 }

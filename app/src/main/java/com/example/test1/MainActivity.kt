@@ -1,12 +1,17 @@
 package com.example.test1
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.test1.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -21,20 +26,22 @@ class MainActivity : AppCompatActivity() {
         setContentView(mBinding.root)
 
         val bottomMenu = mBinding.bottomnavigationmenu
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
+
         bottomMenu.setupWithNavController(navController = navController)
-        view.state.observe(this){
+        view.state.observe(this) {
             bottomMenu.visibility = it
         }
-        navController.navigate(R.id.splashFragment2)
+        view.splash.observe(this){
+            mBinding.splash.root.visibility = it
+        }
+
+
     }
 
 
-
-    fun getBottomMenu(){
-        view.getVisible()
-    }
 
 
 

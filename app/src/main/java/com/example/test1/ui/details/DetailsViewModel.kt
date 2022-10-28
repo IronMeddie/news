@@ -15,18 +15,35 @@ import javax.inject.Inject
 class DetailsViewModel @Inject constructor(private val repository: NewsRepository) : ViewModel() {
 
     private val favorited: MutableLiveData<Boolean> = MutableLiveData(false)
-    val fav :LiveData<Boolean>
-    get() = favorited
+    val fav: LiveData<Boolean>
+        get() = favorited
 
-    fun getSavedArticles() = viewModelScope.launch(Dispatchers.IO){
-        repository.getFavorites()
-    }
+
+//    fun getSavedArticles() = viewModelScope.launch(Dispatchers.IO) {
+//        repository.getFavorites()
+//    }
+
 
     fun saveToFavorites(article: Article) = viewModelScope.launch(Dispatchers.IO) {
+        if (!repository.alreadiLiked(article)) {
             repository.addToFavorites(article)
+        }
+        update(article)
+    }
+
+    fun update(article: Article) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val value = repository.alreadiLiked(article)
+            viewModelScope.launch(Dispatchers.Main) {
+                favorited.value = value
+            }
+        }
     }
 
     fun delete(article: Article) = viewModelScope.launch(Dispatchers.IO) {
-        repository.deliteFavorite(article)
+        if (repository.alreadiLiked(article)) {
+            repository.deliteFavorite(article)
+        }
+        update(article)
     }
 }

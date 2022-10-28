@@ -25,6 +25,7 @@ class DetailsFragment : Fragment() {
     private val mBinding get() = _binding!!
     private val args: DetailsFragmentArgs by navArgs()
     private val viewModel by viewModels<DetailsViewModel>()
+    var liked = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +39,12 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val articleArgs = args.article
         articleArgs.let { art ->
+
+
+            viewModel.update(art)
+
             art.urlToImage.let {
+
                 Glide.with(this).load(it).placeholder(R.drawable.ic_news_default)
                     .into(mBinding.headerImageDetails)
             }
@@ -46,6 +52,7 @@ class DetailsFragment : Fragment() {
                 headerImageDetails.clipToOutline = true
                 detailsTitle.text = art.title
                 detailsDescrirtion.text = art.description
+
                 detailsButton.setOnClickListener { view ->
                     try {
                         Intent()
@@ -64,15 +71,17 @@ class DetailsFragment : Fragment() {
                     }
                 }
 
+                viewModel.fav.observe(viewLifecycleOwner){
+                    if (it)mBinding.iconFavoriteDetails.setImageResource(R.drawable.ic_favorited)
+                    else mBinding.iconFavoriteDetails.setImageResource(R.drawable.ic_favorite)
+                    liked = it
+                }
+
 
                 mBinding.iconFavoriteDetails.setOnClickListener {
-                    if (viewModel.fav.value == true) {
-                        viewModel.delete(article = art)
-                        mBinding.iconFavoriteDetails.setImageResource(R.drawable.ic_favorite)
-                    } else {
-                        viewModel.saveToFavorites(article = art)
-                        mBinding.iconFavoriteDetails.setImageResource(R.drawable.ic_favorited)
-                    }
+                    if (liked){
+                        viewModel.delete(art)
+                    } else viewModel.saveToFavorites(article = art)
                 }
 
 

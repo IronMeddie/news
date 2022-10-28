@@ -7,12 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.test1.models.Article
-import com.example.test1.models.Source
 import com.example.test1.ui.adapters.HolderView.Companion.CONTENT
 import com.example.test1.ui.adapters.HolderView.Companion.HEADER
+import com.example.test1.ui.adapters.HolderView.Companion.HEADER_Favorite
 
 
-class NewsAdapter : RecyclerView.Adapter<ViewHolder>() {
+class NewsAdapter(private val liked: NewsViewHolder.Liked) : RecyclerView.Adapter<ViewHolder>() {
 
 
     private val callback = object : DiffUtil.ItemCallback<Article>() {
@@ -21,7 +21,7 @@ class NewsAdapter : RecyclerView.Adapter<ViewHolder>() {
         }
 
         override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
-            return oldItem.url == newItem.url && oldItem.title == newItem.title
+            return oldItem.url == newItem.url
         }
 
     }
@@ -30,10 +30,14 @@ class NewsAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 
     override fun getItemViewType(position: Int): Int {
-        return if (differ.currentList[position] == emptyArticle()) HEADER else CONTENT
+        return when(differ.currentList[position]){
+            emptyArticle(HEADER) -> HEADER
+            emptyArticle(HEADER_Favorite) -> HEADER_Favorite
+            else -> CONTENT
+        }
     }
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int) = AppHolderFactory.getHolder(parent = viewGroup , viewType = i)
+    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int) = AppHolderFactory.getHolder(parent = viewGroup , viewType = i , liked)
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -60,8 +64,8 @@ class NewsAdapter : RecyclerView.Adapter<ViewHolder>() {
     }
 
 
-    fun updateListAddHeader(list: MutableList<Article>) {
-        list[0] = emptyArticle()
+    fun updateListAddHeader(list: MutableList<Article>, header: Int) {
+        list[0] = emptyArticle(header)
         differ.submitList(list)
     }
 
@@ -69,19 +73,33 @@ class NewsAdapter : RecyclerView.Adapter<ViewHolder>() {
         differ.submitList(list)
     }
 
-    private fun emptyArticle(): Article =  Article(
+    private fun emptyArticle(header: Int): Article =  Article(
         0,
         "null",
-        "Header_125987_MaiN__FragMeNt",
+        "Header_$header",
         "null",
         "null",
 //        Source("", ""),
         "null",
-        "Header_125987_MaiN__FragMeNt",
+        "Header_$header",
         "null"
     ) // header?
 
 
+
+
+    fun ItemLiked(article: Article){
+        val position = differ.currentList.indexOf(article)
+        article.liked = !article.liked
+        notifyItemChanged(position)
+    }
+
+    fun itemRemoved(article: Article){
+        val list = differ.currentList.toMutableList()
+        article.liked = !article.liked
+        list.remove(article)
+        differ.submitList(list)
+    }
 
 
 

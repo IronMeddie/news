@@ -18,10 +18,19 @@ class FavoriteViewModel @Inject constructor(private val repository: NewsReposito
     val list : LiveData<List<Article>>
     get() = favoritesData
 
-    init {
-        getList()
+
+    fun deleteArticle(article: Article) = viewModelScope.launch(Dispatchers.IO) {
+         repository.deliteFavorite(article)
     }
 
+    fun updateListLikes(articles: MutableList<Article>): MutableList<Article> {
+        viewModelScope.launch(Dispatchers.IO) {
+            articles.forEach{
+                it.liked = repository.alreadiLiked(it)
+            }
+        }
+        return articles
+    }
 
     fun getList() = viewModelScope.launch(Dispatchers.IO) {
         favoritesData.postValue(repository.getFavorites())

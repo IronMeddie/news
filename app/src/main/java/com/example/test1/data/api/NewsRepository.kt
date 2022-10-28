@@ -1,5 +1,6 @@
 package com.example.test1.data.api
 
+
 import com.example.test1.data.db.ArctikDao
 import com.example.test1.models.Article
 import javax.inject.Inject
@@ -16,6 +17,24 @@ class NewsRepository @Inject constructor(private val newsService: NewsService,pr
 
     suspend fun addToFavorites(article: Article) = articleDao.insert(article)
 
-    suspend fun deliteFavorite(article: Article) = articleDao.delete(article)
+    suspend fun deliteFavorite(article: Article) = articleDao.delete(getURLarticleFromDB(article) ?: article)
+
+
+    fun alreadiLiked(article: Article): Boolean{
+        getFavorites().forEach {
+            if (it.url == article.url) return true
+        }
+        return false
+    }
+
+    fun getURLarticleFromDB(article: Article): Article? {
+        getFavorites().forEach {
+            if (it.url == article.url) return it
+        }
+        return null
+    }
+
+
+
 
 }
