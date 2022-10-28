@@ -61,8 +61,10 @@
         <action
             android:id="@+id/action_splashFragment2_to_mainFragment"
             app:destination="@id/mainFragment"
+            app:exitAnim="@android:anim/fade_out"
+            app:popExitAnim="@android:anim/fade_out"
             app:launchSingleTop="true"
             app:popUpTo="@id/nav"
-            app:enterAnim="@android:anim/fade_out" />
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
