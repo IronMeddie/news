@@ -1,10 +1,15 @@
 package com.example.test1.di
 
+import android.content.Context
+import androidx.room.Room
 import com.example.test1.data.api.NewsService
+import com.example.test1.data.db.ArctikDao
+import com.example.test1.data.db.ArticleDB
 import com.example.test1.utils.Constance.defaultURL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -30,4 +35,10 @@ object AppModule {
         ).build().create(NewsService::class.java)
 
 
+    @Provides
+    @Singleton
+    fun provideArticleDataBase(@ApplicationContext context: Context) = Room.databaseBuilder(context, ArticleDB::class.java,"article_database").build()
+
+    @Provides
+    fun provideArticleDao(appDatabase: ArticleDB) : ArctikDao = appDatabase.getarticleDao()
 }

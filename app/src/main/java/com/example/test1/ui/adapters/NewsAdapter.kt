@@ -75,7 +75,7 @@ class NewsAdapter : RecyclerView.Adapter<ViewHolder>() {
         "Header_125987_MaiN__FragMeNt",
         "null",
         "null",
-        Source("", ""),
+//        Source("", ""),
         "null",
         "Header_125987_MaiN__FragMeNt",
         "null"

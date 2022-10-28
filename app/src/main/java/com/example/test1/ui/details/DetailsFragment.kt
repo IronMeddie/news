@@ -3,23 +3,28 @@ package com.example.test1.ui.details
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.URLUtil
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.test1.R
 import com.example.test1.databinding.FragmentDetailsBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailsFragment : Fragment() {
 
     private var _binding: FragmentDetailsBinding? = null
     private val mBinding get() = _binding!!
     private val args: DetailsFragmentArgs by navArgs()
+    private val viewModel by viewModels<DetailsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,7 +39,8 @@ class DetailsFragment : Fragment() {
         val articleArgs = args.article
         articleArgs.let { art ->
             art.urlToImage.let {
-                Glide.with(this).load(it).into(mBinding.headerImageDetails)
+                Glide.with(this).load(it).placeholder(R.drawable.ic_news_default)
+                    .into(mBinding.headerImageDetails)
             }
             mBinding.apply {
                 headerImageDetails.clipToOutline = true
@@ -56,6 +62,24 @@ class DetailsFragment : Fragment() {
                         Toast.makeText(context, "Cant open site", Toast.LENGTH_SHORT).show()
 
                     }
+                }
+
+
+                mBinding.iconFavoriteDetails.setOnClickListener {
+                    if (viewModel.fav.value == true) {
+                        viewModel.delete(article = art)
+                        mBinding.iconFavoriteDetails.setImageResource(R.drawable.ic_favorite)
+                    } else {
+                        viewModel.saveToFavorites(article = art)
+                        mBinding.iconFavoriteDetails.setImageResource(R.drawable.ic_favorited)
+                    }
+                }
+
+
+
+
+                iconBack.setOnClickListener {
+                    findNavController().popBackStack()
                 }
             }
 

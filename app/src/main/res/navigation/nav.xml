@@ -3,23 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/mainFragment">
 
     <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.example.test1.ui.main.MainFragment"
-        android:label="fragment_main"
-        tools:layout="@layout/fragment_main" >
-        <action
-            android:id="@+id/action_mainFragment_to_detailsFragment"
-            app:destination="@id/detailsFragment"
-            app:enterAnim="@android:anim/slide_out_right"
-            app:exitAnim="@android:anim/slide_out_right"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right"/>
-    </fragment>
-    <fragment
-        android:id="@+id/detailsFragment"
+        android:id="@+id/details_nav"
         android:name="com.example.test1.ui.details.DetailsFragment"
         android:label="fragment_details"
         tools:layout="@layout/fragment_details" >
@@ -28,41 +15,54 @@
             app:argType="com.example.test1.models.Article" />
     </fragment>
     <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.test1.ui.main.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_details_nav"
+            app:destination="@id/details_nav"
+            app:enterAnim="@android:anim/slide_out_right"
+            app:exitAnim="@android:anim/slide_in_left"
+            app:popEnterAnim="@android:anim/slide_out_right"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
         android:id="@+id/favoriteFragment"
         android:name="com.example.test1.ui.favorite.FavoriteFragment"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" >
         <action
-            android:id="@+id/action_favoriteFragment_to_detailsFragment"
-            app:destination="@id/detailsFragment"
+            android:id="@+id/action_favoriteFragment_to_details_nav"
+            app:destination="@id/details_nav"
             app:enterAnim="@android:anim/slide_out_right"
-            app:exitAnim="@android:anim/slide_out_right"
-            app:popEnterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_in_left"
+            app:popEnterAnim="@android:anim/slide_out_right"
             app:popExitAnim="@android:anim/slide_out_right"/>
     </fragment>
     <fragment
-        android:id="@+id/searchFragment"
+        android:id="@+id/searchFragmentnNav"
         android:name="com.example.test1.ui.search.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search">
+        tools:layout="@layout/fragment_search" >
         <action
-            android:id="@+id/action_searchFragment_to_detailsFragment"
-            app:destination="@id/detailsFragment"
+            android:id="@+id/serach_to_details"
+            app:destination="@id/details_nav"
             app:enterAnim="@android:anim/slide_out_right"
-            app:exitAnim="@android:anim/slide_out_right"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:exitAnim="@android:anim/slide_in_left"
+            app:popEnterAnim="@android:anim/slide_out_right"
+            app:popExitAnim="@android:anim/slide_out_right"/>
     </fragment>
     <fragment
-        android:id="@+id/splashFragment"
+        android:id="@+id/splashFragment2"
         android:name="com.example.test1.ui.splash.SplashFragment"
         android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash">
+        tools:layout="@layout/fragment_splash" >
         <action
-            android:id="@+id/action_splashFragment_to_mainFragment"
+            android:id="@+id/action_splashFragment2_to_mainFragment"
             app:destination="@id/mainFragment"
             app:launchSingleTop="true"
-            app:popUpTo="@+id/nav"
-            app:popUpToInclusive="true" />
+            app:popUpTo="@id/nav"
+            app:enterAnim="@android:anim/fade_out" />
     </fragment>
 </navigation>

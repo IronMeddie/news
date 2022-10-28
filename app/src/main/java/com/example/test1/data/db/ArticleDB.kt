@@ -1,34 +1,11 @@
 package com.example.test1.data.db
 
-import android.content.Context
-import androidx.room.Room
+import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.example.test1.models.Article
 
+
+@Database(entities = [Article::class], version = 1, exportSchema = true)
 abstract class ArticleDB: RoomDatabase() {
-
-
     abstract fun getarticleDao() : ArctikDao
-
-    companion object{
-        @Volatile
-        private var instance: ArticleDB? = null
-        private val LOCK = Any()
-
-        operator fun invoke(context: Context) = instance ?: synchronized(LOCK){
-            instance ?: createDatabase(context).also{ instance = it }
-        }
-
-        private fun createDatabase(context: Context): ArticleDB {
-            return Room.databaseBuilder(
-                context.applicationContext,
-                ArticleDB::class.java,
-                "article_database"
-            ).build()
-
-        }
-
-
-
-
-    }
 }

@@ -14,17 +14,22 @@ class MainActivity : AppCompatActivity() {
     private val mBinding get() = _binding!!
     private val view by viewModels<VmM>()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
+
+        val bottomMenu = mBinding.bottomnavigationmenu
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
-        mBinding.bottomnavigationmenu.setupWithNavController(navController)
+        bottomMenu.setupWithNavController(navController = navController)
         view.state.observe(this){
-            mBinding.bottomnavigationmenu.visibility = it
+            bottomMenu.visibility = it
         }
+        navController.navigate(R.id.splashFragment2)
     }
+
 
 
     fun getBottomMenu(){

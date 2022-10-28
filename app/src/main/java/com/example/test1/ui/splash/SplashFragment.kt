@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.test1.MainActivity
 import com.example.test1.R
 import com.example.test1.databinding.FragmentSplashBinding
 import kotlinx.coroutines.CoroutineScope
@@ -17,6 +18,7 @@ class SplashFragment : Fragment() {
 
     private var _binding: FragmentSplashBinding? = null
     private val mBinding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +35,9 @@ class SplashFragment : Fragment() {
             CoroutineScope(Dispatchers.Main).launch {
             delay(1500)
                 val nacc= findNavController()
-                nacc.navigate(R.id.action_splashFragment_to_mainFragment)
+                nacc.clearBackStack(R.id.mainFragment)
+                nacc.navigate(R.id.action_splashFragment2_to_mainFragment)
+                (activity as MainActivity).getBottomMenu()
         }
     }
 

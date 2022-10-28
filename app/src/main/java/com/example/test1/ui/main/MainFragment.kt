@@ -39,11 +39,10 @@ class MainFragment : Fragment() { // ntcn
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
-        (activity as MainActivity).getBottomMenu()
 
         newsAdapter.setonItemClikListener{
             val bundle = bundleOf("article" to it)
-            view.findNavController().navigate(R.id.action_mainFragment_to_detailsFragment, bundle)
+            view.findNavController().navigate(R.id.action_mainFragment_to_details_nav, bundle)
         }
 
         viewmodel.newsLiveSata.observe(viewLifecycleOwner) { response ->

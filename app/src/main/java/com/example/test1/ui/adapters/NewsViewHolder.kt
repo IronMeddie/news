@@ -9,7 +9,7 @@ class NewsViewHolder(binding: ItemArticleBinding) : RecyclerView.ViewHolder(bind
     val mb = binding
     fun bind(article: Article?) {
         mb.apply {
-            val im = Glide.with(articleImage).load(article?.urlToImage)
+             Glide.with(articleImage).load(article?.urlToImage)
                 .placeholder(com.example.test1.R.drawable.ic_news_default).dontAnimate()
                 .into(articleImage)
             articleImage.clipToOutline = true
