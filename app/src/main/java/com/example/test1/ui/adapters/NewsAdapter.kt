@@ -17,11 +17,11 @@ class NewsAdapter(private val liked: NewsViewHolder.Liked) : RecyclerView.Adapte
 
     private val callback = object : DiffUtil.ItemCallback<Article>() {
         override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {
-            return oldItem == newItem
+            return oldItem.url == newItem.url
         }
 
         override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
-            return oldItem.url == newItem.url && oldItem.liked==newItem.liked
+            return oldItem == newItem
         }
 
     }
