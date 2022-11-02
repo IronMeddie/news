@@ -24,6 +24,13 @@ class NewsAdapter(private val liked: NewsViewHolder.Liked) : RecyclerView.Adapte
             return oldItem == newItem
         }
 
+        override fun getChangePayload(oldItem: Article, newItem: Article): Any? {
+            if (oldItem.liked != newItem.liked) return newItem.liked
+            return super.getChangePayload(oldItem, newItem)
+        }
+
+
+
     }
 
     private val differ = AsyncListDiffer(this, callback)
@@ -90,8 +97,13 @@ class NewsAdapter(private val liked: NewsViewHolder.Liked) : RecyclerView.Adapte
 
     fun ItemLiked(article: Article){
         val position = differ.currentList.indexOf(article)
-        article.liked = !article.liked
-        notifyItemChanged(position)
+//        article.liked = !article.liked
+//        notifyItemChanged(position)
+        val list = differ.currentList.toMutableList()
+        val new = article.copy(liked = !article.liked)
+        list.removeAt(position)
+        list.add(position,new)
+        differ.submitList(list)
     }
 
     fun itemRemoved(article: Article){
