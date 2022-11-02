@@ -97,8 +97,6 @@ class NewsAdapter(private val liked: NewsViewHolder.Liked) : RecyclerView.Adapte
 
     fun ItemLiked(article: Article){
         val position = differ.currentList.indexOf(article)
-//        article.liked = !article.liked
-//        notifyItemChanged(position)
         val list = differ.currentList.toMutableList()
         val new = article.copy(liked = !article.liked)
         list.removeAt(position)
