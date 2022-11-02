@@ -53,7 +53,11 @@ class MainViewModel @Inject constructor(private val newsRepository: NewsReposito
 
     init {
         getNews("ru")
+//        aearataubebgbrcachcncocuczdeegfrgbgrhkhuidieilinitjpkrltlvmamxmyngnlnonzphplptrorsrusasesgsiskthtrtwuausveza
+//        businessentertainmentgeneralhealthsciencesportstechnology
     }
+
+
 
 
 

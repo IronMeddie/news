@@ -43,8 +43,6 @@ class MainFragment : Fragment(), NewsViewHolder.Liked { // ntcn
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        (activity as MainActivity).getBottomMenu()
-
         initAdapter()
 
         newsAdapter.setonItemClikListener{

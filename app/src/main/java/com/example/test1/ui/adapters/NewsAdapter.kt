@@ -21,7 +21,7 @@ class NewsAdapter(private val liked: NewsViewHolder.Liked) : RecyclerView.Adapte
         }
 
         override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
-            return oldItem.url == newItem.url
+            return oldItem.url == newItem.url && oldItem.liked==newItem.liked
         }
 
     }
